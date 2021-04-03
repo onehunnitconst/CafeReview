@@ -50,9 +50,7 @@ public class TestController {
         if (findUser.isPresent())
             return ResponseEntity.badRequest().body("register failed: username is already existed");
 
-        // 비밀번호 암호화 후 저장
-        String encodedPassword = testService.encodePassword(user.getPassword());
-        user.setPassword(encodedPassword);
+        // 확인 후 저장
         testService.join(user);
 
         return ResponseEntity.ok("succesfully registered");
@@ -62,7 +60,7 @@ public class TestController {
      * 사용자 정보를 POST 방식의 HTTP Request의 Body로 받습니다. <br />
      * 성공하면 200 OK를 응답하고 로그인 성공 메시지를 출력합니다. <br />
      * 아이디를 찾을 수 없을 경우 404 Not Found를 응답합니다. <br />
-     * 비밀번호가 일치하지 않을 경우 401 Unauthorized를 응답합니다.
+     * 비밀번호가 일치하지 않을 경우 400 Bad Request를 응답합니다.
      *
      * @param user HTTP Request의 body에서 받은 user form
      * @return {@link ResponseEntity} – HTTP Response
@@ -79,7 +77,7 @@ public class TestController {
             User foundUser = findUser.get();
             return testService.matchPassword(user.getPassword(), foundUser.getPassword()) ?
                     ResponseEntity.ok("login success: hello " + foundUser.getPassword()) :
-                    ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login failed: incorrect password");
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("login failed: incorrect password");
         }
 
         // 존재하지 않을 시 404 상태 코드 응답

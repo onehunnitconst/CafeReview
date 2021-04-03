@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -35,8 +36,9 @@ public class TestService {
      * @param user
      */
     public void join(User user) {
+        String encodePassword = this.encodePassword(user.getPassword());
+        user.setPassword(encodePassword);
         mockRepos.put(id++, user);
-        System.out.println("mockRepos = " + mockRepos);
     }
 
     /**
@@ -47,9 +49,14 @@ public class TestService {
      * @return user (Optional)
      */
     public Optional<User> findUserByUsername(String username) {
-        User findUser = mockRepos.entrySet().stream()
-                .filter(map -> username.equals(map.getValue().getUsername()))
-                .findFirst().get().getValue();
+        User findUser = null;
+        try {
+            findUser = mockRepos.entrySet().stream()
+                    .filter(map -> username.equals(map.getValue().getUsername()))
+                    .findFirst().orElseThrow(NoSuchElementException::new).getValue();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        }
         return Optional.ofNullable(findUser);
     }
 
@@ -59,7 +66,7 @@ public class TestService {
      * @param password 유저 비밀번호
      * @return bcrypt 방식으로 암호화된 비밀번호
      */
-    public String encodePassword (String password) {
+    private String encodePassword (String password) {
         return encoder.encode(password);
     }
 
@@ -72,6 +79,10 @@ public class TestService {
      */
     public boolean matchPassword (String submittedPassword, String encodedUserPassword) {
         return encoder.matches(submittedPassword, encodedUserPassword);
+    }
+
+    public void transaction () {
+        mockRepos.clear();
     }
 
 }
