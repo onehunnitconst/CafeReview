@@ -1,13 +1,21 @@
 package com.cafe.pjt.domain;
 
+import lombok.Data;
+
 /**
  * 테스트를 위한 User 도메인입니다.
  *
  * @author 백상수
  */
+
+@Data
 public class User {
     private String username;
     private String password;
+
+    public User() {
+
+    }
 
     public User(String username, String password) {
         this.username = username;
