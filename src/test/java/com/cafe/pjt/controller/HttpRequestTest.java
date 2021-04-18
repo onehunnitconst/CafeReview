@@ -2,8 +2,8 @@ package com.cafe.pjt.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.cafe.pjt.domain.User;
-import com.cafe.pjt.service.TestService;
+import com.cafe.pjt.repository.model.User;
+import com.cafe.pjt.service.UserServiceImpl;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,12 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 
+@Transactional
+@Rollback
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
 
@@ -25,12 +29,12 @@ public class HttpRequestTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private TestService testService;
+    private UserServiceImpl testService;
 
     @Test
+    @Transactional
+    @Rollback
     public void registerTest() throws Exception {
-        testService.transaction();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -46,7 +50,6 @@ public class HttpRequestTest {
 
     @Test
     public void duplicatedUsernameTest() throws Exception {
-        testService.transaction();
         testService.join(new User("aaa", "bbb"));
 
         HttpHeaders headers = new HttpHeaders();
@@ -63,8 +66,9 @@ public class HttpRequestTest {
     }
 
     @Test
-    public void loginTest() throws Exception{
-        testService.transaction();
+    @Transactional
+    @Rollback
+    public void loginTest() throws Exception {
         testService.join(new User("aaa", "bbb"));
 
         HttpHeaders headers = new HttpHeaders();
@@ -81,8 +85,7 @@ public class HttpRequestTest {
     }
 
     @Test
-    public void UsernameNotFoundTest() throws Exception{
-        testService.transaction();
+    public void UsernameNotFoundTest() throws Exception {
         testService.join(new User("aaa", "bbb"));
 
         HttpHeaders headers = new HttpHeaders();
@@ -99,8 +102,7 @@ public class HttpRequestTest {
     }
 
     @Test
-    public void IncorrectPasswordTest() throws Exception{
-        testService.transaction();
+    public void IncorrectPasswordTest() throws Exception {
         testService.join(new User("aaa", "bbb"));
 
         HttpHeaders headers = new HttpHeaders();
