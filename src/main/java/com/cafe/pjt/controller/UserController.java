@@ -30,12 +30,6 @@ public class UserController {
         this.userService = userServiceImpl;
     }
 
-    @GetMapping("/")
-    @ResponseBody
-    public String index() {
-        return "Hello";
-    }
-
     /**
      * 사용자 정보를 POST 방식의 HTTP Request의 Body로 받습니다. <br />
      * 성공하면 200 OK를 응답하고 Store에 저장하며, 중복 시 400 Bad Request를 보냅니다.
