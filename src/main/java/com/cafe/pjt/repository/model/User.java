@@ -10,6 +10,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User {
@@ -17,8 +18,4 @@ public class User {
     private String username;
     private String password;
 
-    @Override
-    public String toString() {
-        return "username: " + username + ", password: " + password;
-    }
 }
