@@ -1,8 +1,7 @@
 package com.cafe.pjt.service;
 
-import com.cafe.pjt.repository.model.User;
 import com.cafe.pjt.repository.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cafe.pjt.vo.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +19,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void join(User user) {
-        String encodePassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodePassword);
         userMapper.save(user);
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userMapper.findByUsername(username).stream().findFirst();
+    public Optional<User> findByEmail(String email) {
+        return userMapper.findByEmail(email).stream().findFirst();
     }
 
     @Override
     public List<User> findAll() {
         return userMapper.findAll();
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     @Override
