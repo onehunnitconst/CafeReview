@@ -20,3 +20,4 @@ Hot-Fix : 배포를 진행한 후 발생한 버그를 수정해야 할 때 사�
 - gradle
 - typescript
 - mysql
+- redis
