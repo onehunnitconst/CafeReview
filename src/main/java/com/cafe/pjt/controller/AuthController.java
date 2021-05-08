@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -23,7 +24,6 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserSession userSession;
-
     private final UserService userService;
 
     public AuthController(UserSession userSession, UserServiceImpl userServiceImpl) {
@@ -75,5 +75,22 @@ public class AuthController {
 
         // 존재하지 않을 시 404 상태 코드 응답
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 정보를 찾을 수 없습니다.");
+    }
+
+    @GetMapping("/check")
+    @ResponseBody
+    public ResponseEntity<?> check() {
+        return ResponseEntity.ok(userSession.toString());
+    }
+
+    @GetMapping("/logout")
+    @ResponseBody
+    public ResponseEntity<?> logout(HttpSession session) {
+        try {
+            session.invalidate();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok("로그아웃에 성공하였습니다.");
     }
 }
