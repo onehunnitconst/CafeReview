@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findById(Long id) {
+        return userMapper.findById(id).stream().findFirst();
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         return userMapper.findByEmail(email).stream().findFirst();
     }
