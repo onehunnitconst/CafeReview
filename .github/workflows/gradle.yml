@@ -32,10 +32,10 @@ jobs:
       run: ./gradlew clean build
       
     - name: Make Directory for deliver
-      run: mkdir deloy
+      run: mkdir deploy
       
     - name: Copy build file
-      run: cp .build/libs/*.jar ./deploy/
+      run: cp ./build/libs/*.jar ./deploy
       
     - name: Make zip file
       run: zip -r -qq -j ./semonemo-build.zip ./deploy
