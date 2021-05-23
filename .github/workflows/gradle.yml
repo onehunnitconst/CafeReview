@@ -49,4 +49,4 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \ 
-	  ./semonemo-build.zip s3://cafereview-backend/
+	./semonemo-build.zip s3://cafereview-backend/
