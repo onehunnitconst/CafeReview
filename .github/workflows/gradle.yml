@@ -43,8 +43,8 @@ jobs:
       # 해당 SECRET KEY는 테스트용
     - name: AWS S3으로 파일 이관
       env: 
-        AWS_ACCESS_KEY_ID: "AKIAXVP6CDP6XMX4LCDK"
-        AWS_SECRET_ACCESS_KEY: "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"
+        AWS_ACCESS_KEY_ID: 'AKIAXVP6CDP6XMX4LCDK'
+        AWS_SECRET_ACCESS_KEY: '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'
       run: |
           aws s3 cp \
           --region ap-northeast-2 \
