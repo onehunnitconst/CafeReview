@@ -16,13 +16,37 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
+    
+    - name: JDK 11 설치하기
       uses: actions/setup-java@v2
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Grant execute permission for gradlew
+        
+    - name: gradlew 권한 부여
       run: chmod +x gradlew
+      
     - run: gradle wrap
+    
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew clean build
+      
+    - name: Make Directory for deliver
+      run: mkdir deloy
+      
+    - name: Copy build file
+      run: cp .build/libs/*.jar ./deploy/
+      
+    - name: Make zip file
+      run: zip -r -qq -j ./semonemo-build.zip ./deploy
+      
+      # 해당 SECRET KEY는 테스트용
+    - name: AWS S3으로 파일 이관
+      env: 
+        AWS_ACCESS_KEY_ID: AKIAXVP6CDP6XMX4LCDK
+        AWS_SECRET_ACCESS_KEY: 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
+      run: |
+          aws s3 cp \
+          --region ap-northeast-2 \
+          --acl private \ 
+	  ./semonemo-build.zip s3://cafereview-backend/
